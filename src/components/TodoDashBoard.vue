@@ -3,7 +3,7 @@
         <h2>AddTask</h2>
         <AddTask />
         <div>
-            <h2>Tasks</h2>
+            <h2>Current tasks</h2>
             <div class="task-list">
                 <TaskList :tasks="ON_GOING"/>
             </div>
