@@ -3,12 +3,12 @@
         <h2>AddTask</h2>
         <AddTask />
         <div>
-            <h2>on going</h2>
+            <h2>Tasks</h2>
             <div class="task-list">
                 <TaskList :tasks="ON_GOING"/>
             </div>
         </div>
-        <div >
+        <div>
             <h2>Finished</h2>
             <div class="task-list" >
                 <TaskList :tasks="FINISHED"  v-if="FINISHED.length>0"/>
