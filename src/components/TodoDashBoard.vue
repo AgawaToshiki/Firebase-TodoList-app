@@ -5,7 +5,10 @@
         <div>
             <h2>Tasks</h2>
             <div class="task-list">
-                <TaskList :tasks="ON_GOING"/>
+                <TaskList :tasks="ON_GOING" v-if="ON_GOING.length>0"/>
+                    <div v-else>
+                        <p class="noTasks">NO Tasks</p>
+                    </div>
             </div>
         </div>
         <div>
@@ -13,7 +16,8 @@
             <div class="task-list" >
                 <TaskList :tasks="FINISHED"  v-if="FINISHED.length>0"/>
                 <div v-else>
-                nai</div>
+                    <p class="noTasks">NO Tasks</p>
+                </div>
             </div>
         </div>
     </div>
@@ -100,5 +104,9 @@
     }
     .task-list{
         border:1px solid #000;
+    }
+
+    .noTasks{
+        text-align:center;
     }
 </style>
