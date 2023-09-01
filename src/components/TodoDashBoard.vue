@@ -13,7 +13,7 @@
             <div class="task-list" >
                 <TaskList :tasks="FINISHED"  v-if="FINISHED.length>0"/>
                 <div v-else>
-                nai</div>
+                NoTasks</div>
             </div>
         </div>
     </div>
