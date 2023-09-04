@@ -2,12 +2,23 @@
     <div class="new-task">
         <form action="">
             <div class="newtask-name">
-                <label for="">Task:</label>
-                <input type="text" v-model="newTask">
+                <label for="add-task">Task:</label>
+                <input type="text" v-model="newTask" id="add-task">
             </div>
             <div class="newtask-deadline">
-                <label for="">Deadline:</label>
-                <input type="datetime-local" v-model="newDeadline">
+                <label for="add-deadline">Deadline:</label>
+                <input type="datetime-local" v-model="newDeadline" id="add-deadline">
+            </div>
+            <div>
+                <label for="add-image">Image:</label>
+                <input 
+                    type="file" 
+                    accept="image/*" 
+                    id="add-image"
+                    ref="image"
+                    @change="PreviewImage"
+                >
+                <img :src="imageUrl" alt="アップロードする画像" v-if="imageUrl">
             </div>
         </form>
         <AppButton 
@@ -21,9 +32,9 @@
 
 
 <script>
-import { auth, db } from "./firebase"
+import { auth, db, storage } from "./firebase"
 import { collection, addDoc, } from "firebase/firestore"
-
+import { ref, uploadBytes } from "firebase/storage"
 import AppButton from './AppButton.vue'
 
 
@@ -36,6 +47,8 @@ import AppButton from './AppButton.vue'
             return {
                 newTask: '',
                 newDeadline: '',
+                imageUrl: '',
+                file: '',
             }
         },
         methods: {
@@ -44,19 +57,41 @@ import AppButton from './AppButton.vue'
                     const newTask = this.newTask
                     const newDeadline = new Date(this.newDeadline)
                     const currentTime = new Date
+                    const image = this.file.name
                     const uid = auth.currentUser.uid
+
                     await addDoc(collection(db, "tasks"), {
                         contents: newTask,
                         deadline: newDeadline,
                         status: 'ON_GOING',
                         userID: uid,
                         addTime: currentTime,
-                    });
+                        image: image,
+                    })
+
+                const filePath = `TaskImage/${this.file.name}`
+                const storageRef = ref(storage, filePath)
+                if(this.file){
+                    uploadBytes(storageRef, this.file).then((snapshot) => {
+                    console.log('Uploaded a blob or file!',snapshot);
+                });
+                }
+
                     this.newTask = ""
                     this.newDeadline = ""
+                    this.imageUrl = ""
+                    this.file = ""
                 }else{
                     alert('タスク・期限を入力してください。')
                 }
+            },
+            PreviewImage: function(event){
+                const file = event.target.files[0]
+                this.file = file
+                if(file){
+                    const imageUrl = URL.createObjectURL(file)
+                    this.imageUrl = imageUrl
+                };
             },
         }
     }
