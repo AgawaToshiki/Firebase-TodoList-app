@@ -16,6 +16,7 @@
                     accept="image/*" 
                     id="add-image"
                     ref="image"
+                    :value="imageValue"
                     @change="PreviewImage"
                 >
                 <img :src="imageUrl" alt="アップロードする画像" v-if="imageUrl">
@@ -49,6 +50,7 @@ import AppButton from './AppButton.vue'
                 newDeadline: '',
                 imageUrl: '',
                 file: '',
+                imageValue: '',
             }
         },
         methods: {
@@ -73,24 +75,27 @@ import AppButton from './AppButton.vue'
                 const storageRef = ref(storage, filePath)
                 if(this.file){
                     uploadBytes(storageRef, this.file).then((snapshot) => {
+                        //処理が成功したら初期値へリセット
+                        this.imageUrl = ""
+                        this.file = ""
+                        this.imageValue = ""
                     console.log('Uploaded a blob or file!',snapshot);
                 });
                 }
 
                     this.newTask = ""
                     this.newDeadline = ""
-                    this.imageUrl = ""
-                    this.file = ""
                 }else{
                     alert('タスク・期限を入力してください。')
                 }
             },
             PreviewImage: function(event){
                 const file = event.target.files[0]
-                this.file = file
                 if(file){
                     const imageUrl = URL.createObjectURL(file)
                     this.imageUrl = imageUrl
+                    this.file = file
+                    this.imageValue = event.target.value
                 };
             },
         }
