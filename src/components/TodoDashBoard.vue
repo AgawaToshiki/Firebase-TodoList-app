@@ -20,8 +20,9 @@
 </template>
 
 <script lang="js">
-    import { auth, db } from "./firebase"
+    import { auth, db, storage } from "./firebase"
     import { collection, query, where, onSnapshot } from "firebase/firestore"
+    import { ref,getDownloadURL } from "firebase/storage"
     import AddTask from "./AddTask.vue"
     import AppButton from "./AppButton.vue"
     import TaskList from "./TaskList.vue"
@@ -62,6 +63,28 @@ import { trackSlotScopes } from "@vue/compiler-core"
         methods: {
 
             watchObserver: function(currentUser){
+
+                getDownloadURL(ref(storage, 'images/stars.jpg'))
+                .then((url) => {
+                // `url` is the download URL for 'images/stars.jpg'
+
+                // This can be downloaded directly:
+                const xhr = new XMLHttpRequest();
+                xhr.responseType = 'blob';
+                xhr.onload = (event) => {
+                const blob = xhr.response;
+                };
+                xhr.open('GET', url);
+                xhr.send();
+
+                // Or inserted into an <img> element
+                const img = document.getElementById('myimg');
+                img.setAttribute('src', url);
+                })
+                .catch((error) => {
+                // Handle any errors
+                });
+
                 const watch = query(collection(db, "tasks"), where("userID", "==", currentUser))
                 onSnapshot(watch, (querySnapshot) => {
                     this.tasks = []

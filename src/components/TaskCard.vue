@@ -3,7 +3,8 @@
         <div class="task" v-if="!isEditTask">
             <div class="flex-box">
                 <p>task:{{ task.contents }}</p>
-                <p>Deadline:{{ formatDeadline }}</p>                 
+                <p>Deadline:{{ formatDeadline }}</p>
+                <p v-if="task.image">image:<img :src="task.image" alt=""></p>                 
                 <div>
                     <AppButton
                         @click="editData()"

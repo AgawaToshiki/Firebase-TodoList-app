@@ -71,7 +71,7 @@ import AppButton from './AppButton.vue'
                         image: image,
                     })
 
-                const filePath = `TaskImage/${this.file.name}`
+                const filePath = `TaskImage/${uid}/${this.file.name}`
                 const storageRef = ref(storage, filePath)
                 if(this.file){
                     uploadBytes(storageRef, this.file).then((snapshot) => {
@@ -97,6 +97,7 @@ import AppButton from './AppButton.vue'
                     this.file = file
                     this.imageValue = event.target.value
                 };
+                console.log(auth.currentUser)
             },
         }
     }
