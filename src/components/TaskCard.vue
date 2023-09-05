@@ -185,8 +185,8 @@
     }
 
     .task-image{
-        width: 250px;
-        height: 250px;
+        width: 100px;
+        height: 100px;
         object-fit: cover;
     }
 </style>
