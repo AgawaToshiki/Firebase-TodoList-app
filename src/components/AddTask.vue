@@ -94,11 +94,12 @@ import AppButton from './AppButton.vue'
             PreviewImage: function(event){
                 const file = event.target.files[0]
                 const uid = auth.currentUser.uid
+                const timestamp = Date.now()
                 if(file){
                     const imageUrl = URL.createObjectURL(file)
                     this.imageUrl = imageUrl
                     this.file = file
-                    this.filePath = `TaskImage/${uid}/${file.name}`
+                    this.filePath = `TaskImage/${uid}/${timestamp}${file.name}`
                     this.imageValue = event.target.value
                 }
             },
