@@ -50,6 +50,7 @@ import AppButton from './AppButton.vue'
                 newDeadline: '',
                 imageUrl: '',
                 file: '',
+                filePath: '',
                 imageValue: '',
             }
         },
@@ -59,8 +60,20 @@ import AppButton from './AppButton.vue'
                     const newTask = this.newTask
                     const newDeadline = new Date(this.newDeadline)
                     const currentTime = new Date
-                    const image = this.file.name
                     const uid = auth.currentUser.uid
+                    // const filePath = `TaskImage/${uid}/${this.file.name}`
+                    if(this.file){
+                        const storageRef = ref(storage, this.filePath)
+                        await uploadBytes(storageRef, this.file).then((snapshot) => {
+                            //処理が成功したら初期値へリセット
+                            this.imageUrl = ""
+                            this.file = ""
+                            this.imageValue = ""
+                        },(error) => {
+                            alert(`${error}：画像を正常に登録できませんでした。`)
+                            return
+                        });
+                    }
 
                     await addDoc(collection(db, "tasks"), {
                         contents: newTask,
@@ -68,36 +81,26 @@ import AppButton from './AppButton.vue'
                         status: 'ON_GOING',
                         userID: uid,
                         addTime: currentTime,
-                        image: image,
+                        imageFilePath: this.filePath,
                     })
-
-                const filePath = `TaskImage/${uid}/${this.file.name}`
-                const storageRef = ref(storage, filePath)
-                if(this.file){
-                    uploadBytes(storageRef, this.file).then((snapshot) => {
-                        //処理が成功したら初期値へリセット
-                        this.imageUrl = ""
-                        this.file = ""
-                        this.imageValue = ""
-                    console.log('Uploaded a blob or file!',snapshot);
-                });
-                }
 
                     this.newTask = ""
                     this.newDeadline = ""
+                    this.filePath = ""
                 }else{
                     alert('タスク・期限を入力してください。')
                 }
             },
             PreviewImage: function(event){
                 const file = event.target.files[0]
+                const uid = auth.currentUser.uid
                 if(file){
                     const imageUrl = URL.createObjectURL(file)
                     this.imageUrl = imageUrl
                     this.file = file
+                    this.filePath = `TaskImage/${uid}/${file.name}`
                     this.imageValue = event.target.value
-                };
-                console.log(auth.currentUser)
+                }
             },
         }
     }

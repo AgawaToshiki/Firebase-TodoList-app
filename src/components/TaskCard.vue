@@ -4,7 +4,7 @@
             <div class="flex-box">
                 <p>task:{{ task.contents }}</p>
                 <p>Deadline:{{ formatDeadline }}</p>
-                <p v-if="task.image">image:<img :src="task.image" alt=""></p>                 
+                <div><img :src="task.imageUrl" v-if="task.imageUrl" alt="" class="task-image"></div>                
                 <div>
                     <AppButton
                         @click="editData()"
@@ -55,6 +55,7 @@
         <div class="flex-box">
             <p>task:{{ task.contents }}</p>
             <p>Deadline:{{ formatDeadline }}</p>
+            <div><img :src="task.imageUrl" v-if="task.imageUrl" alt="" class="task-image"></div>
         </div>
         <div class="side-button">
             <AppButton
@@ -74,7 +75,8 @@
 </template>
 
 <script lang="js">
-    import { db } from "./firebase"
+    import { db, storage } from "./firebase"
+    import { ref, deleteObject } from "firebase/storage"
     import { doc, updateDoc, deleteDoc } from "firebase/firestore"
     import { format } from 'date-fns'
     import AppButton from './AppButton.vue'
@@ -113,6 +115,9 @@
 
             deleteData: async function(id){
                 await deleteDoc(doc(db, "tasks", id))
+                if(this.task.imageFilePath){
+                    await deleteObject(ref(storage, this.task.imageFilePath))
+                }
             },
 
             updateData: async function(id){
@@ -177,5 +182,11 @@
     
     .inputwidth{
         width:100%;
+    }
+
+    .task-image{
+        width: 250px;
+        height: 250px;
+        object-fit: cover;
     }
 </style>

@@ -44,6 +44,7 @@ import { trackSlotScopes } from "@vue/compiler-core"
         data(){
             return{
                 tasks: [],
+                // imageUrl: '',
             }
         },
         created: function(){
@@ -64,36 +65,23 @@ import { trackSlotScopes } from "@vue/compiler-core"
 
             watchObserver: function(currentUser){
 
-                getDownloadURL(ref(storage, 'images/stars.jpg'))
-                .then((url) => {
-                // `url` is the download URL for 'images/stars.jpg'
-
-                // This can be downloaded directly:
-                const xhr = new XMLHttpRequest();
-                xhr.responseType = 'blob';
-                xhr.onload = (event) => {
-                const blob = xhr.response;
-                };
-                xhr.open('GET', url);
-                xhr.send();
-
-                // Or inserted into an <img> element
-                const img = document.getElementById('myimg');
-                img.setAttribute('src', url);
-                })
-                .catch((error) => {
-                // Handle any errors
-                });
-
                 const watch = query(collection(db, "tasks"), where("userID", "==", currentUser))
-                onSnapshot(watch, (querySnapshot) => {
+                onSnapshot(watch,(querySnapshot) => {
                     this.tasks = []
-                    querySnapshot.forEach((doc) => {
+                    querySnapshot.forEach(async(doc) => {
                         const id = doc.id
                         const data = doc.data()
+                        let imageUrl = ""
+                        if(data.imageFilePath){
+                            imageUrl = await getDownloadURL(ref(storage, data.imageFilePath))
+                        }
+                        // if(data.imageFilePath){
+                        //     this.imageUrl = await getDownloadURL(ref(storage, data.imageFilePath))
+                        // }
                         this.tasks.push({
                             id,
                             ...data,
+                            imageUrl,
                             deadline: data.deadline.toDate(),
                             addTime: data.addTime.toDate().getTime(),
                         })
