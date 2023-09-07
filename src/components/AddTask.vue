@@ -32,11 +32,11 @@
 
 
 <script>
-import { auth, db, storage } from "./firebase"
+import { auth, db } from "./firebase"
 import { collection, addDoc, } from "firebase/firestore"
-import { ref, uploadBytes } from "firebase/storage"
 import AppButton from './AppButton.vue'
 import TaskImage from './TaskImage.vue'
+import { uploadImage } from './util'
 
 
     export default{
@@ -49,7 +49,12 @@ import TaskImage from './TaskImage.vue'
             return {
                 newTask: '',
                 newDeadline: '',
-                imageInfo: {},
+                imageInfo: {
+                    file: '',
+                    filePath: '',
+                    localImageUrl: '',
+                    imageValue: '',
+                },
             }
         },
         methods: {
@@ -59,19 +64,7 @@ import TaskImage from './TaskImage.vue'
                     const newDeadline = new Date(this.newDeadline)
                     const currentTime = new Date
                     const uid = auth.currentUser.uid
-                    if(this.imageInfo.file){
-                        const storageRef = ref(storage, this.imageInfo.filePath)
-                        await uploadBytes(storageRef, this.imageInfo.file).then(() => {
-                            //処理が成功したら初期値へリセット
-                            this.imageInfo.localImageUrl = ""
-                            this.imageInfo.file = ""
-                            this.imageInfo.imageValue = ""
-                        },(error) => {
-                            alert(`${error}：画像を正常に登録できませんでした。`)
-                            return
-                        });
-                    }
-
+                    await uploadImage(this.imageInfo)
                     await addDoc(collection(db, "tasks"), {
                         contents: newTask,
                         deadline: newDeadline,
@@ -83,7 +76,7 @@ import TaskImage from './TaskImage.vue'
 
                     this.newTask = ""
                     this.newDeadline = ""
-                    this.filePath = ""
+                    this.imageInfo.filePath = ""
                 }else{
                     alert('タスク・期限を入力してください。')
                 }
@@ -94,12 +87,10 @@ import TaskImage from './TaskImage.vue'
                 const timestamp = Date.now()
                 if(file){
                     const imageUrl = URL.createObjectURL(file)
-                    this.imageInfo = {
-                        file: file,
-                        filepath: `TaskImage/${uid}/${timestamp}${file.name}`,
-                        localImageUrl: imageUrl,
-                        imageValue: event.target.value
-                    }
+                    this.imageInfo.file = file,
+                    this.imageInfo.filePath = `TaskImage/${uid}/${timestamp}${file.name}`,
+                    this.imageInfo.localImageUrl = imageUrl,
+                    this.imageInfo.imageValue = event.target.value
                 }
             },
         }
