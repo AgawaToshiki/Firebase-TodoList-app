@@ -5,15 +5,15 @@
         <div>
             <h2>Tasks</h2>
             <div class="task-list">
-                <TaskList :tasks="ON_GOING"/>
+                <TaskList :tasks="ON_GOING" v-if="ON_GOING.length>0"/>
+                <div v-else style="text-align:center;">NoTasks</div>
             </div>
         </div>
         <div >
             <h2>Finished</h2>
             <div class="task-list" >
                 <TaskList :tasks="FINISHED"  v-if="FINISHED.length>0"/>
-                <div v-else>
-                NoTasks</div>
+                <div v-else style="text-align:center;">NoTasks</div>
             </div>
         </div>
     </div>

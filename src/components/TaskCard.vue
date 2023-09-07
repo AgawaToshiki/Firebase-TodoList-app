@@ -33,7 +33,22 @@
             <div class="flex-box">
                 <input type="text" class="inputwidth" v-model="localTask.contents">
                 <DateEdit class="inputwidth" v-model="localTask.deadline" />
+                <div>
+                    <div class="edit-image">
+                        <div class="delete-image-button">×</div>
+                        <img :src="task.imageUrl" alt="" class="task-image">
+                    </div>
+                    <input 
+                        type="file" 
+                        accept="image/*" 
+                        id="add-image"
+                        ref="image"
+                        :value="localTask.imageValue"
+                        @change="PreviewImage"
+                    >
+                </div>
             </div>
+                
             <div class="side-button">
                 <AppButton
                         @click="updateData(task.id)"
@@ -179,14 +194,31 @@
     .edit-button{
         margin: 0 10px 0 0;
     }
-    
     .inputwidth{
         width:100%;
     }
-
     .task-image{
         width: 100px;
         height: 100px;
         object-fit: cover;
+    }
+    .edit-image{
+        position:relative;
+        width:100px;
+        height:100px;
+        border:1px solid #000;
+    }
+    .delete-image-button{
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 15px;
+        height: 15px;
+        right: 5px;
+        top: 5px;
+        border: 1px solid #000;
+        border-radius: 10px;
+        cursor: pointer;
     }
 </style>

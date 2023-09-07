@@ -1,11 +1,11 @@
 <template>
-    <div class="new-task">
+    <div class="add-task">
         <form action="">
-            <div class="newtask-name">
+            <div class="new-task task-name">
                 <label for="add-task">Task:</label>
                 <input type="text" v-model="newTask" id="add-task">
             </div>
-            <div class="newtask-deadline">
+            <div class="new-task task-deadline">
                 <label for="add-deadline">Deadline:</label>
                 <input type="datetime-local" v-model="newDeadline" id="add-deadline">
             </div>
@@ -15,11 +15,10 @@
                     type="file" 
                     accept="image/*" 
                     id="add-image"
-                    ref="image"
                     :value="imageValue"
                     @change="PreviewImage"
                 >
-                <img :src="imageUrl" alt="アップロードする画像" v-if="imageUrl">
+                <img :src="imageUrl" alt="アップロードする画像" v-if="imageUrl" class="new-task task-image">
             </div>
         </form>
         <AppButton 
@@ -110,22 +109,24 @@ import AppButton from './AppButton.vue'
 
 <style scoped>
 
-    .new-task{
+    .add-task{
         display:flex;
         flex-direction:column;
     }
-    .newtask-name{
+    .new-task{
         display:flex;
         justify-content:space-between;
         margin-bottom:30px;
     }
-    .newtask-deadline{
-        display:flex;
-        justify-content:space-between;
-        margin-bottom:30px;
-    }
-    .newtask-name input,.newtask-deadline input{
+
+    .task-name input,
+    .task-deadline input{
         width:500px;
+    }
+    .task-image{
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
     }
     .add-button{
         margin:0 0 0 auto;
