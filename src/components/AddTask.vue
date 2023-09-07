@@ -15,10 +15,10 @@
                     type="file" 
                     accept="image/*" 
                     id="add-image"
-                    :value="imageValue"
+                    :value="imageInfo.imageValue"
                     @change="PreviewImage"
                 >
-                <img :src="imageUrl" alt="アップロードする画像" v-if="imageUrl" class="new-task task-image">
+                <TaskImage :imageUrl="imageInfo.localImageUrl" v-if="imageInfo.localImageUrl" class="new-task task-image"/>
             </div>
         </form>
         <AppButton 
@@ -36,21 +36,20 @@ import { auth, db, storage } from "./firebase"
 import { collection, addDoc, } from "firebase/firestore"
 import { ref, uploadBytes } from "firebase/storage"
 import AppButton from './AppButton.vue'
+import TaskImage from './TaskImage.vue'
 
 
     export default{
         name: 'AddTask',
         components: {
-            AppButton
+            AppButton,
+            TaskImage,
         },
         data(){
             return {
                 newTask: '',
                 newDeadline: '',
-                imageUrl: '',
-                file: '',
-                filePath: '',
-                imageValue: '',
+                imageInfo: {},
             }
         },
         methods: {
@@ -60,14 +59,13 @@ import AppButton from './AppButton.vue'
                     const newDeadline = new Date(this.newDeadline)
                     const currentTime = new Date
                     const uid = auth.currentUser.uid
-                    // const filePath = `TaskImage/${uid}/${this.file.name}`
-                    if(this.file){
-                        const storageRef = ref(storage, this.filePath)
-                        await uploadBytes(storageRef, this.file).then((snapshot) => {
+                    if(this.imageInfo.file){
+                        const storageRef = ref(storage, this.imageInfo.filePath)
+                        await uploadBytes(storageRef, this.imageInfo.file).then(() => {
                             //処理が成功したら初期値へリセット
-                            this.imageUrl = ""
-                            this.file = ""
-                            this.imageValue = ""
+                            this.imageInfo.localImageUrl = ""
+                            this.imageInfo.file = ""
+                            this.imageInfo.imageValue = ""
                         },(error) => {
                             alert(`${error}：画像を正常に登録できませんでした。`)
                             return
@@ -80,7 +78,7 @@ import AppButton from './AppButton.vue'
                         status: 'ON_GOING',
                         userID: uid,
                         addTime: currentTime,
-                        imageFilePath: this.filePath,
+                        imageFilePath: this.imageInfo.filePath,
                     })
 
                     this.newTask = ""
@@ -96,10 +94,12 @@ import AppButton from './AppButton.vue'
                 const timestamp = Date.now()
                 if(file){
                     const imageUrl = URL.createObjectURL(file)
-                    this.imageUrl = imageUrl
-                    this.file = file
-                    this.filePath = `TaskImage/${uid}/${timestamp}${file.name}`
-                    this.imageValue = event.target.value
+                    this.imageInfo = {
+                        file: file,
+                        filepath: `TaskImage/${uid}/${timestamp}${file.name}`,
+                        localImageUrl: imageUrl,
+                        imageValue: event.target.value
+                    }
                 }
             },
         }

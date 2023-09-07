@@ -44,7 +44,6 @@ import { trackSlotScopes } from "@vue/compiler-core"
         data(){
             return{
                 tasks: [],
-                // imageUrl: '',
             }
         },
         created: function(){

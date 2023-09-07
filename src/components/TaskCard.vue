@@ -34,16 +34,13 @@
                 <input type="text" class="inputwidth" v-model="localTask.contents">
                 <DateEdit class="inputwidth" v-model="localTask.deadline" />
                 <div>
-                    <div class="edit-image">
-                        <div class="delete-image-button">×</div>
-                        <img :src="task.imageUrl" alt="" class="task-image">
-                    </div>
+                    <TaskImage :imageUrl="task.imageUrl" v-if="!localImageUrl"/>
+                    <TaskImage :imageUrl="localImageUrl" v-else/>
                     <input 
                         type="file" 
                         accept="image/*" 
                         id="add-image"
-                        ref="image"
-                        :value="localTask.imageValue"
+                        :value="imageValue"
                         @change="PreviewImage"
                     >
                 </div>
@@ -90,12 +87,13 @@
 </template>
 
 <script lang="js">
-    import { db, storage } from "./firebase"
+    import { auth, db, storage } from "./firebase"
     import { ref, deleteObject } from "firebase/storage"
     import { doc, updateDoc, deleteDoc } from "firebase/firestore"
     import { format } from 'date-fns'
     import AppButton from './AppButton.vue'
     import DateEdit from './DateEdit.vue'
+    import TaskImage from './TaskImage.vue'
 
 
     export default{
@@ -103,6 +101,7 @@
         components: {
             AppButton,
             DateEdit,
+            TaskImage,
         },
         props: {
             task: {
@@ -114,6 +113,10 @@
             return{
                 localTask: Object.assign({}, this.task),
                 isEditTask: false,
+                localImageUrl: '',
+                file: '',
+                filePath: '',
+                imageValue: '',
             }
         },
         computed: {
@@ -165,6 +168,19 @@
                     status: "FINISHED",
                 })
             },
+
+            PreviewImage: function(event){
+                const file = event.target.files[0]
+                const uid = auth.currentUser.uid
+                const timestamp = Date.now()
+                if(file){
+                    const imageUrl = URL.createObjectURL(file)
+                    this.localImageUrl = imageUrl
+                    this.file = file
+                    this.filePath = `TaskImage/${uid}/${timestamp}${file.name}`
+                    this.imageValue = event.target.value
+                }
+            },
         },
     }
 </script>
@@ -202,23 +218,5 @@
         height: 100px;
         object-fit: cover;
     }
-    .edit-image{
-        position:relative;
-        width:100px;
-        height:100px;
-        border:1px solid #000;
-    }
-    .delete-image-button{
-        position: absolute;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 15px;
-        height: 15px;
-        right: 5px;
-        top: 5px;
-        border: 1px solid #000;
-        border-radius: 10px;
-        cursor: pointer;
-    }
+
 </style>
