@@ -1,67 +1,7 @@
 <template>
     <div v-if="task.status === 'ON_GOING'">
-        <div class="task" v-if="!isEditTask">
-            <div class="flex-box">
-                <p>task:{{ task.contents }}</p>
-                <p>Deadline:{{ formatDeadline }}</p>
-                <div><img :src="task.imageUrl" v-if="task.imageUrl" alt="" class="task-image"></div>                
-                <div>
-                    <AppButton
-                        @click="editData()"
-                        btnColor="green"
-                        btnSize="small">
-                        Edit
-                    </AppButton>
-                    <AppButton
-                        @click="deleteData(task.id)"
-                        btnColor="red"
-                        btnSize="small">
-                        Delete
-                    </AppButton>
-                </div>
-            </div>
-            <div class="side-button">
-                <AppButton
-                    @click="completeTask(task.id)"
-                    btnColor="blue"
-                    btnSize="large">
-                    Done
-                </AppButton>
-            </div>
-        </div>
-        <div class="edit-task" v-else>
-            <div class="flex-box">
-                <input type="text" class="inputwidth" v-model="localTask.contents">
-                <DateEdit class="inputwidth" v-model="localTask.deadline" />
-                <div>
-                    <TaskImage :imageUrl="task.imageUrl" v-if="!localImageUrl"/>
-                    <TaskImage :imageUrl="localImageUrl" v-else/>
-                    <input 
-                        type="file" 
-                        accept="image/*" 
-                        id="add-image"
-                        :value="imageValue"
-                        @change="PreviewImage"
-                    >
-                </div>
-            </div>
-                
-            <div class="side-button">
-                <AppButton
-                        @click="updateData(task.id)"
-                        btnColor="green"
-                        btnSize="midium">
-                        Update
-                </AppButton>
-                <AppButton
-                        @click="cancelEdit()"
-                        btnColor="red"
-                        btnSize="midium">
-                        Cancel
-                </AppButton>
-            </div>
-
-        </div>
+        <ViewTask :task="task" v-if="!isEditTask" @isEdit="isEdit"/>
+        <EditTask :task="task" v-else @isEdit="isEdit"/>     
     </div>
     <div class="task" v-else-if="task.status === 'FINISHED'">
         <div class="flex-box">
@@ -92,16 +32,16 @@
     import { doc, updateDoc, deleteDoc } from "firebase/firestore"
     import { format } from 'date-fns'
     import AppButton from './AppButton.vue'
-    import DateEdit from './DateEdit.vue'
-    import TaskImage from './TaskImage.vue'
+    import ViewTask from './ViewTask.vue'
+    import EditTask from './EditTask.vue'
 
 
     export default{
         name: 'TaskCard',
         components: {
             AppButton,
-            DateEdit,
-            TaskImage,
+            ViewTask,
+            EditTask,
         },
         props: {
             task: {
@@ -111,12 +51,8 @@
         },
         data(){
             return{
-                localTask: Object.assign({}, this.task),
+                localTask: '',
                 isEditTask: false,
-                localImageUrl: '',
-                file: '',
-                filePath: '',
-                imageValue: '',
             }
         },
         computed: {
@@ -126,35 +62,6 @@
             },
         },
         methods: {
-
-            editData: function(){
-                this.isEditTask = true
-            },
-
-            deleteData: async function(id){
-                await deleteDoc(doc(db, "tasks", id))
-                if(this.task.imageFilePath){
-                    await deleteObject(ref(storage, this.task.imageFilePath))
-                }
-            },
-
-            updateData: async function(id){
-                const updateTask = doc(db, "tasks", id)
-                await updateDoc(updateTask, {
-                    contents: this.localTask.contents,
-                    deadline: this.localTask.deadline
-                })
-                this.isEditTask = false
-            },
-
-            cancelEdit: function(){
-                //キャンセル時に元データと入力の値に違いがあれば値を元データに戻す
-                if(this.task.deadline !== this.localTask.deadline){
-                    this.localTask.deadline = this.task.deadline
-                }
-                this.isEditTask = false
-            },
-
             returnTask: async function(id){
                 const updateTask = doc(db, "tasks", id)
                 await updateDoc(updateTask, {
@@ -169,18 +76,9 @@
                 })
             },
 
-            PreviewImage: function(event){
-                const file = event.target.files[0]
-                const uid = auth.currentUser.uid
-                const timestamp = Date.now()
-                if(file){
-                    const imageUrl = URL.createObjectURL(file)
-                    this.localImageUrl = imageUrl
-                    this.file = file
-                    this.filePath = `TaskImage/${uid}/${timestamp}${file.name}`
-                    this.imageValue = event.target.value
-                }
-            },
+            isEdit: function(){
+                this.isEditTask = !this.isEditTask
+            }
         },
     }
 </script>

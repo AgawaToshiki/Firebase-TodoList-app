@@ -16,7 +16,7 @@
                     accept="image/*" 
                     id="add-image"
                     :value="imageInfo.imageValue"
-                    @change="PreviewImage"
+                    @change="previewImage"
                 >
                 <TaskImage :imageUrl="imageInfo.localImageUrl" v-if="imageInfo.localImageUrl" class="new-task task-image"/>
             </div>
@@ -36,7 +36,8 @@ import { auth, db } from "./firebase"
 import { collection, addDoc, } from "firebase/firestore"
 import AppButton from './AppButton.vue'
 import TaskImage from './TaskImage.vue'
-import { uploadImage } from './util'
+import { storage } from "./firebase"
+import { ref, uploadBytes } from "firebase/storage"
 
 
     export default{
@@ -52,8 +53,8 @@ import { uploadImage } from './util'
                 imageInfo: {
                     file: '',
                     filePath: '',
-                    localImageUrl: '',
                     imageValue: '',
+                    localImageUrl: '',
                 },
             }
         },
@@ -64,7 +65,15 @@ import { uploadImage } from './util'
                     const newDeadline = new Date(this.newDeadline)
                     const currentTime = new Date
                     const uid = auth.currentUser.uid
-                    await uploadImage(this.imageInfo)
+                    //画像アップロード処理
+                    if(this.imageInfo.file){
+                        const storageRef = ref(storage, this.imageInfo.filePath)
+                        await uploadBytes(storageRef, this.imageInfo.file).then(() => {
+                        },(error) => {
+                            alert(`${error}：画像を正常に登録できませんでした。`)
+                            return
+                        });
+                     }
                     await addDoc(collection(db, "tasks"), {
                         contents: newTask,
                         deadline: newDeadline,
@@ -76,20 +85,20 @@ import { uploadImage } from './util'
 
                     this.newTask = ""
                     this.newDeadline = ""
-                    this.imageInfo.filePath = ""
+                    this.imageInfo = ""
                 }else{
                     alert('タスク・期限を入力してください。')
                 }
             },
-            PreviewImage: function(event){
+            previewImage: function(event){
                 const file = event.target.files[0]
                 const uid = auth.currentUser.uid
                 const timestamp = Date.now()
                 if(file){
-                    const imageUrl = URL.createObjectURL(file)
-                    this.imageInfo.file = file,
-                    this.imageInfo.filePath = `TaskImage/${uid}/${timestamp}${file.name}`,
-                    this.imageInfo.localImageUrl = imageUrl,
+                    const localImageUrl = URL.createObjectURL(file)
+                    this.imageInfo.localImageUrl = localImageUrl
+                    this.imageInfo.file = file
+                    this.imageInfo.filePath = `TaskImage/${uid}/${timestamp}${file.name}`
                     this.imageInfo.imageValue = event.target.value
                 }
             },

@@ -74,9 +74,6 @@ import { trackSlotScopes } from "@vue/compiler-core"
                         if(data.imageFilePath){
                             imageUrl = await getDownloadURL(ref(storage, data.imageFilePath))
                         }
-                        // if(data.imageFilePath){
-                        //     this.imageUrl = await getDownloadURL(ref(storage, data.imageFilePath))
-                        // }
                         this.tasks.push({
                             id,
                             ...data,

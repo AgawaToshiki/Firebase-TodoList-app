@@ -1,6 +1,6 @@
 <template>
     <div class="edit-image">
-        <div class="delete-image-button">×</div>
+        <div class="delete-image-button" @click="deleteImage">×</div>
         <img :src="imageUrl" alt="" class="task-image">
     </div>
 </template>
@@ -13,6 +13,11 @@
         imageUrl: {
             type: String,
         },
+    },
+    methods: {
+        deleteImage: function(){
+            this.$emit('deleteImage')
+        }
     },
   }
 </script>
