@@ -64,18 +64,30 @@
         },
         methods: {
             updateData: async function(id){
+                //変更がなければ以降の処理を実行しない
+                if(JSON.stringify(this.task) === JSON.stringify(this.localTask)){
+                    this.$emit('isEdit')
+                    return
+                }
                 //画像アップロード処理
-
                 //画像が追加・変更・削除された時
                 if(this.task.imageFilePath !== this.localTask.imageFilePath){
                     //画像がある時だけ登録
                     if(this.localTask.imageFilePath){
                         const storageRef = ref(storage, this.localTask.imageFilePath)
-                        await uploadBytes(storageRef, this.file)
+                        try{
+                            await uploadBytes(storageRef, this.file)
+                        }catch(error){
+                            alert(`${error}:画像の追加に失敗しました。`)
+                        }
                     }
                     //前の画像がある場合は削除
                     if(this.task.imageFilePath){
-                        await deleteObject(ref(storage, this.task.imageFilePath))
+                        try{
+                            await deleteObject(ref(storage, this.task.imageFilePath))
+                        }catch(error){
+                            alert(`${error}:前画像の削除に失敗しました。`)
+                        }              
                     }
                 }
                 //Firestoreへ書き込み
@@ -83,18 +95,26 @@
                     const updateTask = doc(db, "tasks", id)
                     //画像のパスがある時は一緒に登録
                     if(this.localTask.imageFilePath){
-                        await updateDoc(updateTask, {
+                        try{
+                            await updateDoc(updateTask, {
                             contents: this.localTask.contents,
                             deadline: this.localTask.deadline,
                             imageFilePath: this.localTask.imageFilePath
-                        })
+                            })
+                        }catch(error){
+                            alert(`${error}:Taskの更新に失敗しました。`)
+                        }
                     }else{
                         //画像がないまたは消した時はパスを削除して登録
-                        await updateDoc(updateTask, {
+                        try{
+                            await updateDoc(updateTask, {
                             contents: this.localTask.contents,
                             deadline: this.localTask.deadline,
-                            imageFilePath: '',
-                        })
+                            imageFilePath: ''
+                            })
+                        }catch(error){
+                            alert(`${error}:Taskの更新に失敗しました。`)
+                        }
                     }
                 }
                 this.file = ''

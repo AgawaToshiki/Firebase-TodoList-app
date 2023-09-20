@@ -13,7 +13,8 @@
         default: null,
       }
     },
-    emits: ['update: modelValue'],
+    //'update: modelValue'とスペースが入っているとエラーになるので注意
+    emits: ['update:modelValue'],
     computed: {
 
       dateTime: {

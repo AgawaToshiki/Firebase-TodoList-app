@@ -64,17 +64,29 @@
             },
 
             deleteData: async function(id){
-                await deleteDoc(doc(db, "tasks", id))
+                try{
+                    await deleteDoc(doc(db, "tasks", id))
+                }catch{
+                    alert(`${error}:Taskの削除に失敗しました。`)
+                }
                 if(this.task.imageFilePath){
-                    await deleteObject(ref(storage, this.task.imageFilePath))
+                    try{
+                        await deleteObject(ref(storage, this.task.imageFilePath))
+                    }catch(error){
+                        alert(`${error}:画像の削除に失敗しました。`)
+                    }
                 }
             },
 
             completeTask: async function(id){
                 const updateTask = doc(db, "tasks", id)
-                await updateDoc(updateTask, {
-                    status: "FINISHED",
-                })
+                try{
+                    await updateDoc(updateTask, {
+                        status: "FINISHED",
+                    })
+                }catch(error){
+                    alert(`${error}:ステータスを更新できませんでした。`)
+                }
             },
         },
     }

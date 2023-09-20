@@ -18,7 +18,7 @@
                     :value="imageInfo.imageValue"
                     @change="previewImage"
                 >
-                <TaskImage :imageUrl="imageInfo.localImageUrl" v-if="imageInfo.localImageUrl" class="new-task task-image"/>
+                <TaskImage :imageUrl="imageInfo.localImageUrl" v-if="imageInfo.localImageUrl" @deleteImage="deleteImage" class="new-task task-image"/>
             </div>
         </form>
         <AppButton 
@@ -60,20 +60,25 @@ import { ref, uploadBytes } from "firebase/storage"
         },
         methods: {
             addData: async function(){
-                if(this.newTask && this.newDeadline){
-                    const newTask = this.newTask
-                    const newDeadline = new Date(this.newDeadline)
-                    const currentTime = new Date
-                    const uid = auth.currentUser.uid
-                    //画像アップロード処理
-                    if(this.imageInfo.file){
-                        const storageRef = ref(storage, this.imageInfo.filePath)
-                        await uploadBytes(storageRef, this.imageInfo.file).then(() => {
-                        },(error) => {
-                            alert(`${error}：画像を正常に登録できませんでした。`)
-                            return
-                        });
-                     }
+                //タスクか期限が空であればreturn
+                if(!this.newTask || !this.newDeadline){
+                    alert("タスク・期限を入力してください。")
+                    return
+                }
+                const newTask = this.newTask
+                const newDeadline = new Date(this.newDeadline)
+                const currentTime = new Date
+                const uid = auth.currentUser.uid
+                //画像アップロード処理
+                if(this.imageInfo.file){
+                    const storageRef = ref(storage, this.imageInfo.filePath)
+                    try{
+                        await uploadBytes(storageRef, this.imageInfo.file)
+                    }catch(error){
+                        alert(`${error}:画像を正常に登録できませんでした。`)
+                    }
+                }
+                try{
                     await addDoc(collection(db, "tasks"), {
                         contents: newTask,
                         deadline: newDeadline,
@@ -85,9 +90,11 @@ import { ref, uploadBytes } from "firebase/storage"
 
                     this.newTask = ""
                     this.newDeadline = ""
-                    this.imageInfo = ""
-                }else{
-                    alert('タスク・期限を入力してください。')
+                    for(const key in this.imageInfo){
+                            this.imageInfo[key] = ""
+                        }
+                }catch(error){
+                    alert(`${error}:Taskを追加できませんでした。`)
                 }
             },
             previewImage: function(event){
@@ -102,6 +109,11 @@ import { ref, uploadBytes } from "firebase/storage"
                     this.imageInfo.imageValue = event.target.value
                 }
             },
+            deleteImage: function(){
+                for(const key in this.imageInfo){
+                    this.imageInfo[key] = ""
+                }
+            }
         }
     }
 </script>

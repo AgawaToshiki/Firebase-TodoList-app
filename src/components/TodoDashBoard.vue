@@ -26,10 +26,7 @@
     import AddTask from "./AddTask.vue"
     import AppButton from "./AppButton.vue"
     import TaskList from "./TaskList.vue"
-import { trackSlotScopes } from "@vue/compiler-core"
-
-
-
+    import util from "./util"
 
 
 
@@ -47,8 +44,16 @@ import { trackSlotScopes } from "@vue/compiler-core"
             }
         },
         created: function(){
-            const currentUser = auth.currentUser.uid
-            this.watchObserver(currentUser)
+            try{
+                const currentUser = auth.currentUser.uid
+                if(!currentUser){
+                    throw new util.AuthError()
+                }
+                this.watchObserver(currentUser)
+            }catch(error){
+                const errorResult = util.errorHandler(error)
+                console.error(errorResult.message)
+            }
         },
         computed: {
 
