@@ -77,8 +77,10 @@
                         const storageRef = ref(storage, this.localTask.imageFilePath)
                         try{
                             await uploadBytes(storageRef, this.file)
+                            throw new Error()
                         }catch(error){
                             alert(`${error}:画像の追加に失敗しました。`)
+                            return
                         }
                     }
                     //前の画像がある場合は削除
