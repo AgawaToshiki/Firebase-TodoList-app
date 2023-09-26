@@ -4,25 +4,7 @@
         <EditTask :task="task" v-else @isEdit="isEdit"/>     
     </div>
     <div class="task" v-else-if="task.status === 'FINISHED'">
-        <div class="flex-box">
-            <p>task:{{ task.contents }}</p>
-            <p>Deadline:{{ formatDeadline }}</p>
-            <div><img :src="task.imageUrl" v-if="task.imageUrl" alt="" class="task-image"></div>
-        </div>
-        <div class="side-button">
-            <AppButton
-                @click="returnTask(task.id)"
-                btnColor="green"
-                btnSize="midium">
-                Return
-            </AppButton>
-            <AppButton
-                @click="deleteData(task.id)"
-                btnColor="red"
-                btnSize="midium">
-                Delete
-            </AppButton>
-        </div>
+        <ViewTask :task="task"/>
     </div>
 </template>
 
@@ -62,35 +44,6 @@
             },
         },
         methods: {
-            returnTask: async function(id){
-                const updateTask = doc(db, "tasks", id)
-                await updateDoc(updateTask, {
-                    status: "ON_GOING",
-                })
-            },
-
-            completeTask: async function(id){
-                const updateTask = doc(db, "tasks", id)
-                await updateDoc(updateTask, {
-                    status: "FINISHED",
-                })
-            },
-
-            deleteData: async function(id){
-                try{
-                    await deleteDoc(doc(db, "tasks", id))
-                }catch{
-                    alert(`${error}:Taskの削除に失敗しました。`)
-                }
-                if(this.task.imageFilePath){
-                    try{
-                        await deleteObject(ref(storage, this.task.imageFilePath))
-                    }catch(error){
-                        alert(`${error}:画像の削除に失敗しました。`)
-                    }
-                }
-            },
-
             isEdit: function(){
                 this.isEditTask = !this.isEditTask
             }

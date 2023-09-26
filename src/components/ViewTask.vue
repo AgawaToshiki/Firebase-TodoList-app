@@ -4,7 +4,7 @@
             <p>task:{{ task.contents }}</p>
             <p>Deadline:{{ formatDeadline }}</p>
             <div><img :src="task.imageUrl" v-if="task.imageUrl" alt="" class="task-image"></div>                
-            <div>
+            <div v-if="task.status === 'ON_GOING'">
                 <AppButton
                     @click="editData()"
                     btnColor="green"
@@ -19,12 +19,26 @@
                 </AppButton>
             </div>
         </div>
-        <div class="side-button">
+        <div class="side-button" v-if="task.status === 'ON_GOING'">
             <AppButton
                 @click="completeTask(task.id)"
                 btnColor="blue"
                 btnSize="large">
                 Done
+            </AppButton>
+        </div>
+        <div class="side-button"  v-else-if="task.status === 'FINISHED'">
+            <AppButton
+                @click="returnTask(task.id)"
+                btnColor="green"
+                btnSize="midium">
+                Return
+            </AppButton>
+            <AppButton
+                @click="deleteData(task.id)"
+                btnColor="red"
+                btnSize="midium">
+                Delete
             </AppButton>
         </div>
     </div>
@@ -87,6 +101,13 @@
                 }catch(error){
                     alert(`${error}:ステータスを更新できませんでした。`)
                 }
+            },
+
+            returnTask: async function(id){
+                const updateTask = doc(db, "tasks", id)
+                await updateDoc(updateTask, {
+                    status: "ON_GOING",
+                })
             },
         },
     }
