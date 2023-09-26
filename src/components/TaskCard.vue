@@ -76,6 +76,21 @@
                 })
             },
 
+            deleteData: async function(id){
+                try{
+                    await deleteDoc(doc(db, "tasks", id))
+                }catch{
+                    alert(`${error}:Taskの削除に失敗しました。`)
+                }
+                if(this.task.imageFilePath){
+                    try{
+                        await deleteObject(ref(storage, this.task.imageFilePath))
+                    }catch(error){
+                        alert(`${error}:画像の削除に失敗しました。`)
+                    }
+                }
+            },
+
             isEdit: function(){
                 this.isEditTask = !this.isEditTask
             }
