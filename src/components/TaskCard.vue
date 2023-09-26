@@ -3,7 +3,7 @@
         <ViewTask :task="task" v-if="!isEditTask" @isEdit="isEdit"/>
         <EditTask :task="task" v-else @isEdit="isEdit"/>     
     </div>
-    <div class="task" v-else-if="task.status === 'FINISHED'">
+    <div v-else-if="task.status === 'FINISHED'">
         <ViewTask :task="task"/>
     </div>
 </template>
@@ -47,39 +47,3 @@
         },
     }
 </script>
-
-<style scoped>
-    .task,.edit-task{
-        display:flex;
-    }
-
-    .flex-box{
-        width:50%;
-        padding:20px;
-    }
-    .side-button{
-        width:50%;
-        text-align:center;
-        align-self:center;
-    }
-    .button-box{
-        display:flex;
-        align-items:center;
-        margin-block-start: 1em;
-        margin-block-end: 1em;
-        margin-inline-start: 0px;
-        margin-inline-end: 0px;
-    }
-    .edit-button{
-        margin: 0 10px 0 0;
-    }
-    .inputwidth{
-        width:100%;
-    }
-    .task-image{
-        width: 100px;
-        height: 100px;
-        object-fit: cover;
-    }
-
-</style>

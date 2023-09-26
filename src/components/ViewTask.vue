@@ -114,6 +114,9 @@
 </script>
 
 <style scoped>
+    .task{
+        display:flex;
+    }
     .flex-box{
         width:50%;
         padding:20px;
