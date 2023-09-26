@@ -45,7 +45,7 @@
 </template>
 
 <script lang="js">
-    import { auth, db, storage } from "./firebase"
+    import { db, storage } from "./firebase"
     import { ref, deleteObject } from "firebase/storage"
     import { doc, updateDoc, deleteDoc } from "firebase/firestore"
     import { format } from 'date-fns'

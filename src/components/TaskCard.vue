@@ -9,9 +9,6 @@
 </template>
 
 <script lang="js">
-    import { auth, db, storage } from "./firebase"
-    import { ref, deleteObject } from "firebase/storage"
-    import { doc, updateDoc, deleteDoc } from "firebase/firestore"
     import { format } from 'date-fns'
     import AppButton from './AppButton.vue'
     import ViewTask from './ViewTask.vue'
