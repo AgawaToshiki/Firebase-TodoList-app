@@ -37,7 +37,7 @@ import { collection, addDoc, } from "firebase/firestore"
 import AppButton from './AppButton.vue'
 import TaskImage from './TaskImage.vue'
 import { storage } from "./firebase"
-import { ref, uploadBytes } from "firebase/storage"
+import { ref, uploadBytes, deleteObject } from "firebase/storage"
 
 
     export default{
