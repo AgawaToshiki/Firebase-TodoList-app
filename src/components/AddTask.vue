@@ -97,6 +97,8 @@ import { ref, uploadBytes } from "firebase/storage"
                 }catch(error){
                     console.error(error.message)
                     alert('Taskを追加できませんでした')
+                    //失敗した場合は登録時の画像を削除
+                    await deleteObject(ref(storage, this.localTask.imageFilePath))
                 }
             },
             previewImage: function(event){
