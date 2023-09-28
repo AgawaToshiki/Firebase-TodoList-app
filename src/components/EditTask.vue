@@ -77,18 +77,19 @@
                         const storageRef = ref(storage, this.localTask.imageFilePath)
                         try{
                             await uploadBytes(storageRef, this.file)
-                            throw new Error()
                         }catch(error){
-                            alert(`${error}:画像の追加に失敗しました。`)
-                            return
+                            console.error(error.message)
+                            alert('画像の追加に失敗しました')
                         }
                     }
                     //前の画像がある場合は削除
                     if(this.task.imageFilePath){
                         try{
                             await deleteObject(ref(storage, this.task.imageFilePath))
+
                         }catch(error){
-                            alert(`${error}:前画像の削除に失敗しました。`)
+                            console.error(error.message)
+                            alert('前画像の削除に失敗しました')
                         }              
                     }
                 }
@@ -104,7 +105,10 @@
                             imageFilePath: this.localTask.imageFilePath
                             })
                         }catch(error){
-                            alert(`${error}:Taskの更新に失敗しました。`)
+                            console.error(error.message)
+                            alert('Taskの更新に失敗しました')
+                            //失敗した場合は登録時の画像を削除
+                            await deleteObject(ref(storage, this.localTask.imageFilePath))
                         }
                     }else{
                         //画像がないまたは消した時はパスを削除して登録
@@ -115,7 +119,10 @@
                             imageFilePath: ''
                             })
                         }catch(error){
-                            alert(`${error}:Taskの更新に失敗しました。`)
+                            console.error(error.message)
+                            alert('Taskの更新に失敗しました')
+                            //失敗した場合は登録時の画像を削除
+                            await deleteObject(ref(storage, this.localTask.imageFilePath))
                         }
                     }
                 }

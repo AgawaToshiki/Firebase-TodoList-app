@@ -81,13 +81,15 @@
                 try{
                     await deleteDoc(doc(db, "tasks", id))
                 }catch{
-                    alert(`${error}:Taskの削除に失敗しました。`)
+                    console.error(error.message)
+                    alert('Taskの削除に失敗しました')
                 }
                 if(this.task.imageFilePath){
                     try{
                         await deleteObject(ref(storage, this.task.imageFilePath))
                     }catch(error){
-                        alert(`${error}:画像の削除に失敗しました。`)
+                        console.error(error.message)
+                        alert('画像の削除に失敗しました')
                     }
                 }
             },
@@ -99,15 +101,21 @@
                         status: "FINISHED",
                     })
                 }catch(error){
-                    alert(`${error}:ステータスを更新できませんでした。`)
+                    console.error(error.message)
+                    alert('ステータスを更新できませんでした')
                 }
             },
 
             returnTask: async function(id){
                 const updateTask = doc(db, "tasks", id)
-                await updateDoc(updateTask, {
-                    status: "ON_GOING",
-                })
+                try{
+                    await updateDoc(updateTask, {
+                        status: "ON_GOING",
+                    })
+                }catch(error){
+                    console.error(error.message)
+                    alert('ステータスを更新できませんでした')
+                }
             },
         },
     }

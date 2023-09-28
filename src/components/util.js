@@ -1,3 +1,4 @@
+import { FirestoreError } from 'firebase/firestore'
 class BadRequestError extends Error {
     constructor(...arg) {
         super(...arg)
@@ -11,17 +12,20 @@ class AuthError extends Error {
 }
 
 function errorHandler(error){
-    console.error(error)
     if(error instanceof BadRequestError){
-        return { status: 400, message: error.message || "BadRequestError" }
+        return { message: error.message || "BadRequestError" }
     }
     if(error instanceof AuthError){
-        return { status: 401, message: error.message || "AuthError" }
+        return { message: error.message || "AuthError" }
+    }
+    if(error instanceof FirestoreError){
+        return { message: error.message || "FirestoreError" }
     }
 }
 
   export default {
     BadRequestError,
     AuthError,
+    FirestoreError,
     errorHandler
   }

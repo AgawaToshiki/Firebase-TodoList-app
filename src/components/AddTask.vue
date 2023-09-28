@@ -75,7 +75,8 @@ import { ref, uploadBytes } from "firebase/storage"
                     try{
                         await uploadBytes(storageRef, this.imageInfo.file)
                     }catch(error){
-                        alert(`${error}:画像を正常に登録できませんでした。`)
+                        console.error(error.message)
+                        alert('画像を正常に登録できませんでした')
                     }
                 }
                 try{
@@ -94,7 +95,8 @@ import { ref, uploadBytes } from "firebase/storage"
                             this.imageInfo[key] = ""
                         }
                 }catch(error){
-                    alert(`${error}:Taskを追加できませんでした。`)
+                    console.error(error.message)
+                    alert('Taskを追加できませんでした')
                 }
             },
             previewImage: function(event){

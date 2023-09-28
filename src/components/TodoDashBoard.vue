@@ -53,10 +53,10 @@
             }catch(error){
                 const errorResult = util.errorHandler(error)
                 console.error(errorResult.message)
+                alert(errorResult.message + '：認証に失敗しました')
             }
         },
         computed: {
-
             ON_GOING: function(){
                 return this.tasks.filter((t) => t.status === "ON_GOING")
             },
@@ -66,9 +66,7 @@
             },
         },
         methods: {
-
             watchObserver: function(currentUser){
-
                 const watch = query(collection(db, "tasks"), where("userID", "==", currentUser))
                 onSnapshot(watch,(querySnapshot) => {
                     this.tasks = []
