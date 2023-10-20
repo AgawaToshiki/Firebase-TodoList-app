@@ -1,16 +1,14 @@
 <template>
     <div id="header">
         <h1>ToDo List App</h1>
-        <div class="signout-button">
+        <div class="signout-button" v-if="isSignedIn">
             <AppButton 
-                v-if="isSignedIn"
-                @click="signout"
-                btnSize="midium">
-                Sign Out
+                @click="signOut"
+                btnSize="midium"
+                btnColor="red">
+                SignOut
             </AppButton>
-            <!-- <button v-if="isSignedIn" @click="signout">Sign out</button> -->
         </div>
-        
     </div>
     
 </template>
@@ -32,12 +30,12 @@ import AppButton from "./AppButton.vue";
             },
         },
         methods: {
-            signout: function(){
+            signOut: function(){
                 signOut(auth).then(() => {
-                    console.log('サインアウトしました')
                 // Sign-out successful.
                 }).catch((error) => {
                 // An error happened.
+                    alert('サインアウトが正常にできませんでした（' + error.message + '）')
                 });
             },
         }
@@ -49,11 +47,8 @@ import AppButton from "./AppButton.vue";
         display:flex;
         padding:30px;
         align-items:center;
-        justify-content:space-between;
+        justify-content:center;
+        column-gap:50px;
         background-color:#999
     }
-
-    /* h1{
-        text-align:center;
-    } */
 </style>

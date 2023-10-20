@@ -1,38 +1,43 @@
 <template>
-    <div>
-        <form @submit.prevent="signin">
-            <div>
-                <label for="mail">Email：</label>
-                <input type="mailAddress" id="mail" v-model="mailAddress" required/>
-            </div>
-            <div>
-                <label for="password">Password：</label>
-                <input type="password" id="password" v-model="password" required/>
-            </div>
-            
-            <input type="submit" value="ログイン">
-            
-        </form>
-        
-        <button @click="signup">新規登録</button>
+    <div class="login">
+        <div class="login-form">
+            <label for="mail">Email:</label>
+            <input type="e-mail" id="mail" v-model="mailAddress" required/>
+        </div>
+        <div class="login-form">
+            <label for="password">Password:</label>
+            <input type="password" id="password" v-model="password" required/>
+        </div>
+        <div class="login-button">
+            <AppButton 
+                @click="signIn"
+                btnSize="midium"
+                btnColor="green">
+                SignIn
+            </AppButton>
+            <AppButton 
+                @click="signUp"
+                btnSize="midium">
+                SignUp
+            </AppButton>
+            <!-- <button @click="signIn">SignIn</button>
+            <button @click="signUp">SignUp</button> -->
+        </div>
     </div>
 </template>
 
 <script lang="js">
 import { auth } from "./firebase"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
-
-
-
-
-
-
-
-
+import util from "./util"
+import AppButton from './AppButton.vue'
 
 
 export default {
     name: 'Login',
+    components: {
+        AppButton,
+    },
     data(){
         return{
             mailAddress: '',
@@ -41,7 +46,11 @@ export default {
     },
     methods:{
         
-        signup: function(){
+        signUp: function(){
+            if(!this.mailAddress || !this.password){
+                alert('新規登録するにはE-mailとPasswordを入力してください')
+                return
+            }
             const mailAddress = this.mailAddress
             const password = this.password
             createUserWithEmailAndPassword(auth, mailAddress, password)
@@ -49,36 +58,49 @@ export default {
                 console.log('成功しました。')
             })
             .catch(function(error) {
-                alert('登録できません（' + error.message + '）');
+                const loginError = util.LoginErrorHandler(error)
+                alert(loginError.message)
             });
         },
 
-        signin: function(){
+        signIn: function(){
+            if(!this.mailAddress || !this.password){
+                alert('サインインするにはE-mailとPasswordを入力してください')
+                return
+            }
             const mailAddress = this.mailAddress
             const password = this.password
             signInWithEmailAndPassword(auth, mailAddress, password)
             .then((userCredential) => {
                 // Signed in 
                 const user = userCredential.user;
+                console.log(user)
             })
             .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                alert('サインインできません('+ errorCode + errorMessage +')')
+                const loginError = util.LoginErrorHandler(error)
+                alert(loginError.message)
             });
         },
     }
 }
-
-
-
-    // register.addEventListener('click', function(e) {
-    //     const mailAddress = document.getElementById('mailAddress').value;
-    //     const password = document.getElementById('password').value;
-        
-    //     firebase.auth().createUserWithEmailAndPassword(mailAddress, password)
-    //     .catch(function(error) {
-    //         alert('登録できません（' + error.message + '）');
-    //     });
-    // });
 </script>
+
+<style scoped>
+.login {
+    margin-top: 30px;
+}
+.login-form {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+.login-form input {
+    width: 500px;
+}
+.login-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 30px;
+}
+</style>

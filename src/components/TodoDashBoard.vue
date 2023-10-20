@@ -24,15 +24,13 @@
 </template>
 
 <script lang="js">
-    import { auth, db } from "./firebase"
+    import { auth, db, storage } from "./firebase"
     import { collection, query, where, onSnapshot } from "firebase/firestore"
+    import { ref,getDownloadURL } from "firebase/storage"
     import AddTask from "./AddTask.vue"
     import AppButton from "./AppButton.vue"
     import TaskList from "./TaskList.vue"
-
-
-
-
+    import util from "./util"
 
 
 
@@ -50,11 +48,19 @@
             }
         },
         created: function(){
-            const currentUser = auth.currentUser.uid
-            this.watchObserver(currentUser)
+            try{
+                const currentUser = auth.currentUser.uid
+                if(!currentUser){
+                    throw new util.AuthError()
+                }
+                this.watchObserver(currentUser)
+            }catch(error){
+                const errorResult = util.errorHandler(error)
+                console.error(errorResult.message)
+                alert(errorResult.message + '：認証に失敗しました')
+            }
         },
         computed: {
-
             ON_GOING: function(){
                 return this.tasks.filter((t) => t.status === "ON_GOING")
             },
@@ -64,17 +70,21 @@
             },
         },
         methods: {
-
             watchObserver: function(currentUser){
                 const watch = query(collection(db, "tasks"), where("userID", "==", currentUser))
-                onSnapshot(watch, (querySnapshot) => {
+                onSnapshot(watch,(querySnapshot) => {
                     this.tasks = []
-                    querySnapshot.forEach((doc) => {
+                    querySnapshot.forEach(async(doc) => {
                         const id = doc.id
                         const data = doc.data()
+                        let imageUrl = ""
+                        if(data.imageFilePath){
+                            imageUrl = await getDownloadURL(ref(storage, data.imageFilePath))
+                        }
                         this.tasks.push({
                             id,
                             ...data,
+                            imageUrl,
                             deadline: data.deadline.toDate(),
                             addTime: data.addTime.toDate().getTime(),
                         })

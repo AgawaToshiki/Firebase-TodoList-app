@@ -13,7 +13,8 @@
         default: null,
       }
     },
-    emits: ['update: modelValue'],
+    //'update: modelValue'とスペースが入っているとエラーになるので注意
+    emits: ['update:modelValue'],
     computed: {
 
       dateTime: {
@@ -33,40 +34,3 @@
     },
   }
 </script>
-
-
-
-
-<!-- <script setup lang="ts">
-  import { parse, format, isValid } from 'date-fns'
-  import { computed } from 'vue'
-
-  interface Props {
-      modelValue: Date|null
-  }
-  const props = defineProps<Props>()
-  
-
-  const emits = defineEmits(['update:modelValue'])
-  
-  const formatDate =(arg:Date|null):string=>{
-    if (!arg) { return '' }
-      return format(arg, 'yyyy-MM-dd\'T\'HH:mm')
-  }
-
-
-  const dateTime = computed({
-    get: ():string => {
-      return formatDate(props.modelValue)
-
-    },
-    set: (value:string):void => {
-      if (!value) {
-        emits('update:modelValue', null)
-        return
-      }
-      const date = parse(value, 'yyyy-MM-dd\'T\'HH:mm', new Date())
-      emits('update:modelValue', isValid(date) ? date : null)
-    }
-  })
-  </script> -->

@@ -31,15 +31,15 @@
 
     /* color */
     button[data-color="red"]{
-        color:red;
+        color:#E1523D;
     }
 
     button[data-color="blue"]{
-        color:blue;
+        color:#005E54;
     }
 
     button[data-color="green"]{
-        color:green;
+        color:#04BFAD;
     }
 
 
