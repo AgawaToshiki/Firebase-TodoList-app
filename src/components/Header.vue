@@ -4,11 +4,10 @@
         <div class="signout-button">
             <AppButton 
                 v-if="isSignedIn"
-                @click="signout"
+                @click="signOut"
                 btnSize="midium">
                 Sign Out
             </AppButton>
-            <!-- <button v-if="isSignedIn" @click="signout">Sign out</button> -->
         </div>
         
     </div>
@@ -32,12 +31,12 @@ import AppButton from "./AppButton.vue";
             },
         },
         methods: {
-            signout: function(){
+            signOut: function(){
                 signOut(auth).then(() => {
-                    console.log('サインアウトしました')
                 // Sign-out successful.
                 }).catch((error) => {
                 // An error happened.
+                    alert('サインアウトが正常にできませんでした（' + error.message + '）')
                 });
             },
         }
@@ -52,8 +51,4 @@ import AppButton from "./AppButton.vue";
         justify-content:space-between;
         background-color:#999
     }
-
-    /* h1{
-        text-align:center;
-    } */
 </style>
