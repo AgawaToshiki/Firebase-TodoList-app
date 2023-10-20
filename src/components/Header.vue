@@ -1,15 +1,14 @@
 <template>
     <div id="header">
         <h1>ToDo List App</h1>
-        <div class="signout-button">
+        <div class="signout-button" v-if="isSignedIn">
             <AppButton 
-                v-if="isSignedIn"
                 @click="signOut"
-                btnSize="midium">
-                Sign Out
+                btnSize="midium"
+                btnColor="red">
+                SignOut
             </AppButton>
         </div>
-        
     </div>
     
 </template>
@@ -48,7 +47,8 @@ import AppButton from "./AppButton.vue";
         display:flex;
         padding:30px;
         align-items:center;
-        justify-content:space-between;
+        justify-content:center;
+        column-gap:50px;
         background-color:#999
     }
 </style>

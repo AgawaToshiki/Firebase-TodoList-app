@@ -130,6 +130,9 @@
         padding:20px;
     }
     .side-button{
+        display:flex;
+        justify-content:center;
+        column-gap:10px;
         width:50%;
         text-align:center;
         align-self:center;

@@ -1,15 +1,28 @@
 <template>
-    <div>
-        <div>
+    <div class="login">
+        <div class="login-form">
             <label for="mail">Email:</label>
             <input type="e-mail" id="mail" v-model="mailAddress" required/>
         </div>
-        <div>
+        <div class="login-form">
             <label for="password">Password:</label>
             <input type="password" id="password" v-model="password" required/>
         </div>
-        <button @click="signin">SignIn</button>
-        <button @click="signup">SignOut</button>
+        <div class="login-button">
+            <AppButton 
+                @click="signIn"
+                btnSize="midium"
+                btnColor="green">
+                SignIn
+            </AppButton>
+            <AppButton 
+                @click="signUp"
+                btnSize="midium">
+                SignUp
+            </AppButton>
+            <!-- <button @click="signIn">SignIn</button>
+            <button @click="signUp">SignUp</button> -->
+        </div>
     </div>
 </template>
 
@@ -17,18 +30,14 @@
 import { auth } from "./firebase"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 import util from "./util"
-
-
-
-
-
-
-
-
+import AppButton from './AppButton.vue'
 
 
 export default {
     name: 'Login',
+    components: {
+        AppButton,
+    },
     data(){
         return{
             mailAddress: '',
@@ -37,7 +46,7 @@ export default {
     },
     methods:{
         
-        signup: function(){
+        signUp: function(){
             if(!this.mailAddress || !this.password){
                 alert('新規登録するにはE-mailとPasswordを入力してください')
                 return
@@ -49,11 +58,12 @@ export default {
                 console.log('成功しました。')
             })
             .catch(function(error) {
-                alert('登録できません（' + error.message + '）');
+                const loginError = util.LoginErrorHandler(error)
+                alert(loginError.message)
             });
         },
 
-        signin: function(){
+        signIn: function(){
             if(!this.mailAddress || !this.password){
                 alert('サインインするにはE-mailとPasswordを入力してください')
                 return
@@ -74,3 +84,23 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.login {
+    margin-top: 30px;
+}
+.login-form {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+.login-form input {
+    width: 500px;
+}
+.login-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 30px;
+}
+</style>

@@ -49,6 +49,9 @@ function LoginErrorHandler(error){
         }
       } else {
         // その他
+        return {
+            message: error.message
+        }
       }
 }
 

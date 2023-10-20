@@ -18,7 +18,7 @@
         <div class="side-button">
             <AppButton
                     @click="updateData(task.id)"
-                    btnColor="green"
+                    btnColor="blue"
                     btnSize="midium">
                     Update
             </AppButton>
@@ -173,6 +173,9 @@
         padding:20px;
     }
     .side-button{
+        display:flex;
+        justify-content:center;
+        column-gap:10px;
         width:50%;
         text-align:center;
         align-self:center;

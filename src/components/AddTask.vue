@@ -1,11 +1,11 @@
 <template>
     <div class="add-task">
         <form action="">
-            <div class="new-task task-name">
+            <div class="new-task">
                 <label for="add-task">Task:</label>
                 <input type="text" v-model="newTask" id="add-task">
             </div>
-            <div class="new-task task-deadline">
+            <div class="new-task">
                 <label for="add-deadline">Deadline:</label>
                 <input type="datetime-local" v-model="newDeadline" id="add-deadline">
             </div>
@@ -134,10 +134,8 @@ import { ref, uploadBytes, deleteObject } from "firebase/storage"
         justify-content:space-between;
         margin-bottom:30px;
     }
-
-    .task-name input,
-    .task-deadline input{
-        width:500px;
+    .new-task input {
+        width: 500px;
     }
     .task-image{
         width: 100px;
