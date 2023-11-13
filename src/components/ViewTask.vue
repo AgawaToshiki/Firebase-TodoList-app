@@ -1,7 +1,7 @@
 <template>
     <div class="task">
         <div class="flex-box">
-            <p>task:{{ task.contents }}</p>
+            <p>Task:{{ task.contents }}</p>
             <p>Deadline:{{ formatDeadline }}</p>
             <div><img :src="task.imageUrl" v-if="task.imageUrl" alt="" class="task-image"></div>                
             <div v-if="task.status === 'ON_GOING'">

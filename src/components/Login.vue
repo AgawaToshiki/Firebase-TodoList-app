@@ -20,8 +20,6 @@
                 btnSize="midium">
                 SignUp
             </AppButton>
-            <!-- <button @click="signIn">SignIn</button>
-            <button @click="signUp">SignUp</button> -->
         </div>
     </div>
 </template>
