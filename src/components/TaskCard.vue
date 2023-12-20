@@ -10,7 +10,6 @@
 
 <script lang="js">
     import { format } from 'date-fns'
-    import AppButton from './AppButton.vue'
     import ViewTask from './ViewTask.vue'
     import EditTask from './EditTask.vue'
 
@@ -18,7 +17,6 @@
     export default{
         name: 'TaskCard',
         components: {
-            AppButton,
             ViewTask,
             EditTask,
         },
