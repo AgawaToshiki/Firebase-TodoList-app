@@ -10,7 +10,7 @@
                 <p>{{ formatDeadline }}</p>
             </div>
             <div><img :src="task.imageUrl" v-if="task.imageUrl" alt="" class="task-image"></div>                
-            <div v-if="task.status === 'ON_GOING'">
+            <div v-if="task.status === 'ON_GOING'" class="task-button-box">
                 <AppButton
                     @click="editData()"
                     btnColor="green"
@@ -25,7 +25,7 @@
                 </AppButton>
             </div>
         </div>
-        <div class="side-button" v-if="task.status === 'ON_GOING'">
+        <div class="side-button complete-button" v-if="task.status === 'ON_GOING'">
             <AppButton
                 @click="completeTask(task.id)"
                 btnColor="blue"
@@ -33,7 +33,7 @@
                 Done
             </AppButton>
         </div>
-        <div class="side-button"  v-else-if="task.status === 'FINISHED'">
+        <div class="side-button finished-button"  v-else-if="task.status === 'FINISHED'">
             <AppButton
                 @click="returnTask(task.id)"
                 btnColor="green"
@@ -136,6 +136,12 @@
         width:50%;
         padding: 20px;
     }
+
+    .task-button-box {
+        display: flex;
+        column-gap: 10px;
+        margin: 1rem 0;
+    }
     .side-button{
         display:flex;
         justify-content:center;
@@ -155,6 +161,9 @@
     }
 
     @media screen and (max-width: 768px) {
+        .task {
+            flex-direction: column;
+        }
         .task-item {
             flex-direction: column;
             margin-bottom: 1rem;
@@ -165,11 +174,21 @@
         }
 
         .flex-box{
-            width:60%;
+            width:100%;
             padding: 0;
         }
         .side-button{
-            width:40%;
+            width:100%;
+        }
+
+        .side-button.complete-button button{
+            width:100%;
+        }
+
+        .side-button.finished-button {
+            width: 100%;
+            padding: 20px 0;
+            column-gap: 30px;
         }
 
     }

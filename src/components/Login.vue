@@ -93,7 +93,11 @@ export default {
     margin-bottom: 30px;
 }
 .login-form input {
-    width: 500px;
+    width: 75%;
+}
+
+.login-form label {
+    width: 25%;
 }
 .login-button {
     display: flex;

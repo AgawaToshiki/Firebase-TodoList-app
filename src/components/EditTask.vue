@@ -166,6 +166,7 @@
 <style scoped>
     .edit-task{
         display:flex;
+        padding: 20px;
     }
 
     .flex-box{
@@ -182,5 +183,27 @@
     }
     .inputwidth{
         width:100%;
+    }
+
+    @media screen and (max-width: 768px) {
+
+        .edit-task{
+            flex-direction: column;
+        }
+
+        .task-item {
+            flex-direction: column;
+            margin-bottom: 1rem;
+            column-gap: 10px;
+        }
+        .flex-box{
+            width:60%;
+        }
+        .side-button{
+            width: 100%;
+            padding: 20px 0;
+            column-gap: 30px;
+        }
+
     }
 </style>

@@ -120,4 +120,10 @@
     .noTasks{
         text-align:center;
     }
+
+    @media screen and (max-width: 768px) {
+        h2 {
+            font-size: 1.2em;
+        }
+    }
 </style>
