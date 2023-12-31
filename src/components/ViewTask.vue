@@ -1,8 +1,14 @@
 <template>
     <div class="task">
         <div class="flex-box">
-            <p>Task:{{ task.contents }}</p>
-            <p>Deadline:{{ formatDeadline }}</p>
+            <div class="task-item">
+                <p>Task:</p>
+                <p>{{ task.contents }}</p>
+            </div>
+            <div class="task-item">
+                <p>Deadline:</p>
+                <p>{{ formatDeadline }}</p>
+            </div>
             <div><img :src="task.imageUrl" v-if="task.imageUrl" alt="" class="task-image"></div>                
             <div v-if="task.status === 'ON_GOING'">
                 <AppButton
@@ -124,10 +130,11 @@
 <style scoped>
     .task{
         display:flex;
+        padding: 20px;
     }
     .flex-box{
         width:50%;
-        padding:20px;
+        padding: 20px;
     }
     .side-button{
         display:flex;
@@ -137,9 +144,33 @@
         text-align:center;
         align-self:center;
     }
+
+    .task-item {
+        display: flex;
+    }
     .task-image{
         width: 100px;
         height: 100px;
         object-fit: cover;
+    }
+
+    @media screen and (max-width: 768px) {
+        .task-item {
+            flex-direction: column;
+            margin-bottom: 1rem;
+        }
+
+        .task-item p {
+            margin: 0;
+        }
+
+        .flex-box{
+            width:60%;
+            padding: 0;
+        }
+        .side-button{
+            width:40%;
+        }
+
     }
 </style>

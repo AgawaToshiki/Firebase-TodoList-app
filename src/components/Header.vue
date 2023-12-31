@@ -45,10 +45,11 @@ import AppButton from "./AppButton.vue";
 <style scoped>
     #header{
         display:flex;
-        padding:30px;
+        max-width: 600px;
+        width: 100%;
+        padding:30px 0;
         align-items:center;
-        justify-content:center;
-        column-gap:50px;
-        background-color:#999
+        justify-content:space-around;
+        background-color:#999;
     }
 </style>

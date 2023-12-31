@@ -1,7 +1,7 @@
 
 
 <template>
-  <header>
+  <header class="header-component">
     <Header :isSignedIn="this.isSignedIn" />
   </header>
   <section v-if="!isSignedIn">
@@ -39,7 +39,12 @@ import { auth } from './components/firebase'
 </script>
 
 <style>
+  .header-component{
+    max-width: 600px;
+    width: 100%;
+  }
   section{
-    width:600px;
+    max-width: 600px;
+    width: 100%;
   }
 </style>

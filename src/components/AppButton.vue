@@ -55,4 +55,18 @@
     button[data-size="large"]{
         font-size:24px;
     }
+
+    @media screen and (max-width: 768px) {
+        button[data-size="small"]{
+        font-size:14px;
+    }
+
+    button[data-size="midium"]{
+        font-size:14px;
+    }
+
+    button[data-size="large"]{
+        font-size:16px;
+    }
+    }
 </style>

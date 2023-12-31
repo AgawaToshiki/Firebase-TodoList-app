@@ -10,19 +10,20 @@
                 <input type="datetime-local" v-model="newDeadline" id="add-deadline">
             </div>
             <div>
-                <label for="add-image">Image:</label>
-                <input 
-                    type="file" 
-                    accept="image/*" 
-                    id="add-image"
-                    :value="imageInfo.imageValue"
-                    @change="previewImage"
-                >
-                <TaskImage :imageUrl="imageInfo.localImageUrl" v-if="imageInfo.localImageUrl" @deleteImage="deleteImage" class="new-task task-image"/>
+                <div class="add-image-box">
+                    <label for="add-image">Image:</label>
+                    <input 
+                        type="file" 
+                        accept="image/*" 
+                        id="add-image"
+                        :value="imageInfo.imageValue"
+                        @change="previewImage"
+                    >
+                </div>
+                <TaskImage :imageUrl="imageInfo.localImageUrl" v-if="imageInfo.localImageUrl" @deleteImage="deleteImage" class="task-image"/>
             </div>
         </form>
         <AppButton 
-            class="add-button"
             @click="addData"
             btnSize="midium">
             Add
@@ -128,22 +129,43 @@ import { ref, uploadBytes, deleteObject } from "firebase/storage"
     .add-task{
         display:flex;
         flex-direction:column;
+        margin-bottom: 4rem;
     }
     .new-task{
         display:flex;
         justify-content:space-between;
         margin-bottom:30px;
     }
+    .new-task label {
+        width: 15%;
+    }
     .new-task input {
-        width: 500px;
+        width: 85%;
     }
     .task-image{
         width: 100px;
         height: 100px;
         object-fit: cover;
     }
-    .add-button{
-        margin:0 0 0 auto;
+
+    .add-image-box {
+        margin-bottom: 1rem;
+    }
+
+    @media screen and (max-width: 768px) {
+        .new-task{
+            display:flex;
+            flex-direction: column;
+            justify-content:space-between;
+            margin-bottom:30px;
+            }
+        .new-task input {
+            width: 100%;
+        }
+        .new-task label {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
     }
     
 </style>
