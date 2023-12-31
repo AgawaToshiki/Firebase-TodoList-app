@@ -175,7 +175,6 @@
 
         .flex-box{
             width:100%;
-            padding: 0;
         }
         .side-button{
             width:100%;
