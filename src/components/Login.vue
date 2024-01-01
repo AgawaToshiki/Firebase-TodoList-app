@@ -94,6 +94,7 @@ export default {
 }
 .login-form input {
     width: 75%;
+    box-sizing: border-box;
 }
 
 .login-form label {

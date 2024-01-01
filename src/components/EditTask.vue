@@ -183,6 +183,7 @@
     }
     .inputwidth{
         width:100%;
+        box-sizing: border-box;
     }
 
     @media screen and (max-width: 768px) {

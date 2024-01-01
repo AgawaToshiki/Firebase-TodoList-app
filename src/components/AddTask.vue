@@ -141,6 +141,7 @@ import { ref, uploadBytes, deleteObject } from "firebase/storage"
     }
     .new-task input {
         width: 85%;
+        box-sizing: border-box;
     }
     .task-image{
         width: 100px;
