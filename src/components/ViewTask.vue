@@ -130,11 +130,11 @@
 <style scoped>
     .task{
         display:flex;
-        padding: 20px;
+        padding: 35px;
     }
     .flex-box{
         width:50%;
-        padding: 20px;
+        box-sizing: border-box;
     }
 
     .task-button-box {
@@ -175,6 +175,7 @@
 
         .flex-box{
             width:100%;
+            margin-bottom: 1rem;
         }
         .side-button{
             width:100%;
@@ -186,7 +187,6 @@
 
         .side-button.finished-button {
             width: 100%;
-            padding: 20px 0;
             column-gap: 30px;
         }
 

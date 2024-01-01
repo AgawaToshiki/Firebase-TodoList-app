@@ -166,12 +166,12 @@
 <style scoped>
     .edit-task{
         display:flex;
-        padding: 20px;
+        padding: 35px;
     }
 
     .flex-box{
         width:50%;
-        padding:20px;
+        box-sizing: border-box;
     }
     .side-button{
         display:flex;
@@ -197,11 +197,11 @@
             column-gap: 10px;
         }
         .flex-box{
-            width:60%;
+            width: 100%;
+            margin-bottom: 1rem;
         }
         .side-button{
             width: 100%;
-            padding: 20px 0;
             column-gap: 30px;
         }
 
