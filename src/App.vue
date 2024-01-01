@@ -42,9 +42,21 @@ import { auth } from './components/firebase'
   .header-component{
     max-width: 600px;
     width: 100%;
+    margin-bottom: 4rem;
   }
   section{
     max-width: 600px;
     width: 100%;
+    margin-bottom: 4rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    .header-component {
+      margin-bottom: 2rem;
+    }
+
+    section{
+    margin-bottom: 2rem;
+  }
   }
 </style>
